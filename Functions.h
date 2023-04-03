@@ -13,7 +13,7 @@ int RegisterLicense()
     l.set_details();
     fout.write((char*)&l,sizeof(l));
     fout.close();
-    cout<<"\nRecord Saved to File......\n";
+    cout<<"\n\t\t\tRecord Saved to File......\n";
 }
 
 int RegisterVehicle()
@@ -23,7 +23,7 @@ int RegisterVehicle()
     v.set_details();
     fout.write((char*)&v,sizeof(v));
     fout.close();
-    cout<<"\nRecord Saved to File......\n";
+    cout<<"\n\t\t\tRecord Saved to File......\n\n";
 }
 
 int RenewVehicle()
@@ -32,42 +32,47 @@ int RenewVehicle()
     string number;
     int flag = 0;
     fin.open("Vehicle.dat",ios::out|ios::binary);
-    cout<<"Enter registration number: ";
+    cin.ignore();
+    cout<<"\t\t\tEnter registration number: ";
     cin>>number;
-    fin.read((char*)&v,sizeof(v));
-    if(number==v.get_number())
+    while(fin.read((char*)&v,sizeof(v)))
     {
-        v.generate_date();
-        flag++;
-        cout<<"\n\n...Renewed successful...\n";
+        if(number==v.get_number())
+        {
+            v.generate_date();
+            flag++;
+            cout<<"\n\n\t\t\t...Renewed successful...\n\n";
+        }
     }
     fin.close();
     if(flag==0)
     {
-        cout<<"\nThe vehicle with number "<<number<<" not found...\n";
+        cout<<"\n\t\t\tThe vehicle with number "<<number<<" not found...\n\n";
     }
 }
 
 int RenewLicense()
 {
     ifstream fin;
-    string Name,fName,lName;
+    string Name;
     int flag = 0;
     fin.open("License.dat",ios::out|ios::binary);
-    cout<<"Enter name of driver(fName lName):";
-    cin>>fName>>lName;
-    Name = fName + " " + lName;
-    fin.read((char*)&l,sizeof(l));
-    if(Name==l.get_name())
+    cin.ignore();
+    cout<<"\t\t\tEnter name of driver(fName lName):";
+    getline(cin, Name);
+    while(fin.read((char*)&l,sizeof(l)))
     {
-        l.generate_date();
-        flag++;
-        cout<<"\n\n...Renewed successful...\n";
+        if(Name==l.get_name())
+        {
+            l.generate_date();
+            flag++;
+            cout<<"\n\n\t\t\t...Renewed successful...\n\n";
+        }
     }
     fin.close();
     if(flag==0)
     {
-        cout<<"\nDriver "<<Name<<" not found...\n";
+        cout<<"\n\t\t\tDriver "<<Name<<" not found...\n\n";
     }
 }
 
@@ -78,21 +83,22 @@ int SearchDriverByName()
     int flag=0;
     string name;
     fin.open("License.dat",ios::out|ios::binary);
-    cout<<"Enter Name of Driver: ";
+    cin.ignore();
+    cout<<"\t\t\tEnter Name of Driver: ";
     getline(cin,name);
     while(fin.read((char*)&l,sizeof(l)))
     {
         if(name==l.get_name())
         {
+            cout<<"\n\n";
             l.show_details();
             flag++;
-            cout<<"\n\n.....Record Found and Displayed......\n";
         }
     }
     fin.close();
     if(flag==0)
-        cout<<"\nThe Record of Driver "<<name<<" is not in file....\n";
-    cout<<"\nReading of Data File Completed......\n";
+        cout<<"\n\t\t\tThe Record of Driver "<<name<<" is not in file....\n";
+    cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 
@@ -102,50 +108,51 @@ int SearchVehicleByNumber()
     int flag=0;
     string number;
     fin.open("Vehicle.dat",ios::out|ios::binary);
-    cout<<"Enter Vehicle registration number: ";
+    cin.ignore();
+    cout<<"\t\t\tEnter Vehicle registration number: ";
     cin>>number;
     while(fin.read((char*)&v,sizeof(v)))
     {
         if(number==v.get_number())
         {
+            cout<<"\n\n";
             v.show_details();
             flag++;
-            cout<<"\n\n.....Record Found and Displayed......\n";
         }
     }
     fin.close();
     if(flag==0)
-        cout<<"\nThe Record of Vehicle with Registration number "<<number<<" is not in file....\n";
-        cout<<"\nReading of Data File Completed......\n";
+        cout<<"\n\t\t\tThe Record of Vehicle with Registration number "<<number<<" is not in file....\n\n";
+        cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 
 int  ShowRecordsVehicle()
 {
     ifstream fin;
-    cout<<"Showing all registered vehicles\n"
-          "-------------------------------\n";
+    cout<<"\t\t\tShowing all registered vehicles\n"
+          "\t\t\t-------------------------------\n";
     fin.open("Vehicle.dat",ios::out|ios::binary);
     while(fin.read(reinterpret_cast<char*>(&v),sizeof(v)))
     {
         v.show_details();
     }
     fin.close();
-    cout<<"\nReading of Data File Completed......\n";
+    cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 int  ShowRecordsLicense()
 {
     ifstream fin;
-    cout<<"Showing all licensed drivers\n"
-          "----------------------------\n";
+    cout<<"\n\t\t\tShowing all licensed drivers\n"
+          "\t\t\t----------------------------\n";
     fin.open("License.dat",ios::out|ios::app|ios::binary);
     while(fin.read(reinterpret_cast<char*>(&l),sizeof(l)))
     {
         l.show_details();
     }
     fin.close();
-    cout<<"\nReading of Data File Completed......\n";
+    cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 
@@ -160,9 +167,11 @@ int menu()
                 "\t\t\t[2] Register New Vehicle\n"
                 "\t\t\t[3] Renew Driver License\n"
                 "\t\t\t[4] Renew Vehicle Registration\n"
-                "\t\t\t[5] Show Driver Licenses\n"
-                "\t\t\t[6] Show Vehicles Registered\n"
-                "\t\t\t[7] Quit\n";
+                "\t\t\t[5] Search for Driver in database\n"
+                "\t\t\t[6] Search for Vehicle in database\n"
+                "\t\t\t[7] Show all Driver Licenses\n"
+                "\t\t\t[8] Show all Vehicles Registered\n"
+                "\t\t\t[9] Quit\n";
 
         cout<<"\t\t\tOption: "; cin>>choice;
 
@@ -176,14 +185,18 @@ int menu()
                     break;
             case '4': RenewVehicle();
                     break;
-            case '5': ShowRecordsLicense();
+            case '5': SearchDriverByName();
                     break;
-            case '6': ShowRecordsVehicle();
+            case '6': SearchVehicleByNumber();
                     break;
-            case '7': cout<<"\n\t\t\tExiting Application......";
+            case '7': ShowRecordsLicense();
+                    break;
+            case '8': ShowRecordsVehicle();
+                    break;
+            case '9': cout<<"\n\t\t\tExiting Application......";
                 exit(0);
             default: cout<<"\n\t\t\tBOOM!!!\n"
-                        "\t\t\tError occurred.\n";
+                        "\t\t\tError occurred.\n\n";
                         exit(0);
         }
 

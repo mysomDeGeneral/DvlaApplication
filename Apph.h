@@ -26,7 +26,11 @@ class DvlaRegistration
 
 
     public:
-
+        /*
+        This function uses the system time to generate date for the registration
+        Renewal date is set to the date on which the registration was made
+        Expiring date is set to five(5) years plus the date on which registration was made
+        */
         void generate_date()
         {
             int year, month, day;
@@ -42,9 +46,17 @@ class DvlaRegistration
             expiring_date = to_string(xyear) + '-' + to_string(month) + '-' + to_string(day);
 
         }
+        /*
+        This function computes the registration number using a combination of three(3) strings
+        First part of the number is a 2-letter word from a random selection of the 26 English alphabets
+        Second part is a 4-letter word from the random selection of the digits 0-9
+        Third part is the a slice of the last 2 digits of the year of registration
+        All three parts are joined with a hyphen(-) to form the registration number
+        */
 
         virtual void generate_number()
         {
+
             srand((unsigned) time(NULL));
             char alpha[26] = { 'A','B','C','D','E','F','G',
                                 'H','I','J','K','L','M','N',
@@ -53,27 +65,27 @@ class DvlaRegistration
 
             char num[10] = {'0','1','2','3','4','5','6','7','8','9'};
 
+            time_t now = time(0);
+            tm *ltm = localtime(&now);
+            Year = 1900 + ltm->tm_year;
 
             string one = "";
             string two = "";
-            string three = "";
-            string year =to_string(Year);
+            string year = to_string(Year);
 
-            for(int i = 0; i<3; i++)
+
+            string three = year.substr(2,3);         //getting the last 2 digits of the year of registration
+
+
+            for(int i = 0; i<2; i++)                //generates 2-letter word of alphabets
                 one = one + alpha[rand()%26];
 
-            for(int i = 0; i<4; i++)
+            for(int i = 0; i<4; i++)                //generates 4-letter word of numbers
                 two = two + num[rand()%10];
 
-            for(int i = 0; i<3; i++)
-                three = three + num[rand()%10];
 
-
-
-
-            Number = one + '-' + two + year + '-' + three;
+            Number = one + '-' + two +'-'+ three;
         }
-
 
 
 };
@@ -107,48 +119,16 @@ class VehicleRegistration :public DvlaRegistration
 
          void show_details()
          {
-            cout<<"Vehicle Details"<<endl;
-            cout<<"Vehicle Name: "<<Name<<endl;
-            cout<<"Registration No: "<<Number<<endl;
-            cout<<"Color: "<<Color<<endl;
-            cout<<"Owner: "<<Owner<<endl;
-            cout<<"Date Registered: "<<renewal_date<<endl;
-            cout<<"Expiring Date: "<<expiring_date<<endl;
+
+            cout<<"\t\t\tVehicle Name: "<<Name<<endl;
+            cout<<"\t\t\tRegistration No: "<<Number<<endl;
+            cout<<"\t\t\tColor: "<<Color<<endl;
+            cout<<"\t\t\tOwner: "<<Owner<<endl;
+            cout<<"\t\t\tDate Registered: "<<renewal_date<<endl;
+            cout<<"\t\t\tExpiring Date: "<<expiring_date<<endl;
             cout<<"\n\n";
          }
 
-        void generate_number()
-        {
-
-            srand((unsigned) time(NULL));
-            char alpha[26] = { 'A','B','C','D','E','F','G',
-                                'H','I','J','K','L','M','N',
-                                'O','P','Q','R','S','T','U',
-                                'V','W','X','Y','Z'};
-
-            char num[10] = {'0','1','2','3','4','5','6','7','8','9'};
-
-            time_t now = time(0);
-            tm *ltm = localtime(&now);
-            Year = 1900 + ltm->tm_year;
-
-            string one = "";
-            string two = "";
-            string year = to_string(Year);
-
-
-            string three = year.substr(2,3);
-
-
-            for(int i = 0; i<2; i++)
-                one = one + alpha[rand()%26];
-
-            for(int i = 0; i<4; i++)
-                two = two + num[rand()%10];
-
-
-            Number = one + '-' + two +'-'+ three;
-        }
 
         string get_number()
         {return Number;}
@@ -181,12 +161,12 @@ class LicenseRegistration : public DvlaRegistration
 
         void set_details()
         {
-            cout<<"First Name: "; cin>>fName;
-            cout<<"Last Name: "; cin>>lName;
-            cout<<"Gender: "; cin>>Gender;
-            cout<<"National ID No: "; cin>>Id;
-            cout<<"Date of Birth(ddmmyy): "; cin>>DOB;
-            Name = fName + " " + lName;
+            cout<<"\t\t\tFirst Name: "; cin>>fName;
+            cout<<"\t\t\tLast Name: "; cin>>lName;
+            cout<<"\t\t\tGender: "; cin>>Gender;
+            cout<<"\t\t\tNational ID No: "; cin>>Id;
+            cout<<"\t\t\tDate of Birth(ddmmyyyy): "; cin>>DOB;
+            Name = fName + " "+ lName;
             generate_date();
             generate_number();
         }
@@ -194,19 +174,19 @@ class LicenseRegistration : public DvlaRegistration
         void show_details()
         {
 
-            string fDob = DOB.substr(0,2) + '-' + DOB.substr(2,2) + '-' + DOB.substr(4,7);
-            cout<<"License details"<<endl;
-            cout<<"Name: "<<Name<<endl;
-            cout<<"Gender: "<<Gender<<endl;
-            cout<<"Id: "<<Id<<endl;
-            cout<<"Date of Birth: "<<fDob<<endl;
-            cout<<"Issue Date: "<<renewal_date<<endl;
-            cout<<"Expiring Date: "<<expiring_date<<endl;
-            cout<<"License No: "<<Number<<endl;
+            string fDob = DOB.substr(0,2) + '-' + DOB.substr(2,2) + '-' + DOB.substr(4,7); //formats the input DOB input dd-mm-yyyy using slicing
+
+            cout<<"\t\t\tName: "<<Name<<endl;
+            cout<<"\t\t\tGender: "<<Gender<<endl;
+            cout<<"\t\t\tId: "<<Id<<endl;
+            cout<<"\t\t\tDate of Birth: "<<fDob<<endl;
+            cout<<"\t\t\tIssue Date: "<<renewal_date<<endl;
+            cout<<"\t\t\tExpiring Date: "<<expiring_date<<endl;
+            cout<<"\t\t\tLicense No: "<<Number<<endl;
             cout<<"\n\n";
         }
 
-
+/*
         void generate_date()
         {
             int year, month, day;
@@ -227,8 +207,14 @@ class LicenseRegistration : public DvlaRegistration
             expiring_date = to_string(xyear) + '-' + to_string(month) + '-' + to_string(day);
 
         }
+*/
 
-
+        /*
+        This function overrides the one in the base class
+        Its first part is a 2-letter word of the 26 English alphabets
+        The second part is the date of birth of the driver
+        The third part is a 3-letter word from the digits 0-9
+        */
          void generate_number()
         {
 
@@ -242,20 +228,14 @@ class LicenseRegistration : public DvlaRegistration
 
 
             string one = "";
-            string two = "";
             string three = "";
             string year =to_string(Year);
 
-            for(int i = 0; i<2; i++)
+            for(int i = 0; i<2; i++)                //generates 2-letter word of alphabets
                 one = one + alpha[rand()%26];
-/*
-            for(int i = 0; i<4; i++)
-                two = two + num[rand()%10];
-*/
-            for(int i = 0; i<3; i++)
+
+            for(int i = 0; i<3; i++)                //generates 3-letter word of numbers
                 three = three + num[rand()%10];
-
-
 
 
             Number = one + '-' + DOB + '-' + three;
