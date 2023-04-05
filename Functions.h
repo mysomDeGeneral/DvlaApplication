@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 #include "Apph.h"
 #ifndef FUNCTIONS_H_INCLUDED
 #define FUNCTIONS_H_INCLUDED
@@ -98,7 +99,6 @@ int SearchDriverByName()
     fin.close();
     if(flag==0)
         cout<<"\n\t\t\tThe Record of Driver "<<name<<" is not in file....\n";
-    cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 
@@ -123,14 +123,13 @@ int SearchVehicleByNumber()
     fin.close();
     if(flag==0)
         cout<<"\n\t\t\tThe Record of Vehicle with Registration number "<<number<<" is not in file....\n\n";
-        cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 
 int  ShowRecordsVehicle()
 {
     ifstream fin;
-    cout<<"\t\t\tShowing all registered vehicles\n"
+    cout<<"\n\t\t\tShowing all registered vehicles\n"
           "\t\t\t-------------------------------\n";
     fin.open("Vehicle.dat",ios::out|ios::binary);
     while(fin.read(reinterpret_cast<char*>(&v),sizeof(v)))
@@ -138,7 +137,6 @@ int  ShowRecordsVehicle()
         v.show_details();
     }
     fin.close();
-    cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 int  ShowRecordsLicense()
@@ -152,7 +150,6 @@ int  ShowRecordsLicense()
         l.show_details();
     }
     fin.close();
-    cout<<"\n\t\t\tReading of Data File Completed......\n\n";
 }
 
 
@@ -161,7 +158,9 @@ int menu()
 {
     do
     {
+        char wait;
         char choice;
+        system("cls");
         cout<<"\t\t\tDVLA REGISTRATION SYSTEM\n"
                 "\t\t\t[1] Register New Driver license\n"
                 "\t\t\t[2] Register New Vehicle\n"
@@ -198,8 +197,10 @@ int menu()
             default: cout<<"\n\t\t\tBOOM!!!\n"
                         "\t\t\tError occurred.\n\n";
                         exit(0);
+
         }
 
+        system("pause");
     }
     while(1);
 }
